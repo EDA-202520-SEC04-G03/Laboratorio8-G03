@@ -132,3 +132,9 @@ def put(my_rbt, key, value):
     
     return my_rbt
 
+def size(my_rbt):
+    return size_tree(my_rbt["root"])
+
+
+def is_empty(my_rbt):
+    return size(my_rbt) == 0
