@@ -1,4 +1,5 @@
-import DataStructures.Tree.rbt_node as rbt 
+import DataStructures.Tree.rbt_node as rbt
+from DataStructures.List import single_linked_list as sll
 
 def new_map():
     return {"root": None}
@@ -138,3 +139,114 @@ def size(my_rbt):
 
 def is_empty(my_rbt):
     return size(my_rbt) == 0
+
+
+def get(my_rbt, key):
+    
+    current = my_rbt["root"]
+    
+    while current is not None:
+        cmp = default_compare(key, current)
+        
+        if cmp == 0:
+            return current["value"]
+        elif cmp < 0:
+            current = current["left"]
+        else:
+            current = current["right"]
+    
+    return None
+
+def get_node(root, key):
+    
+    current = root
+    
+    while current is not None:
+        cmp = default_compare(key, current)
+        
+        if cmp == 0:
+            return current
+        elif cmp < 0:
+            current = current["left"]
+        else:
+            current = current["right"]
+    
+    return None
+
+
+def contains(my_rbt, key):
+    return get(my_rbt, key) is not None
+
+def get_min_node(root):
+    current = root
+    while current is not None and current["left"] is not None:
+        current = current["left"]
+    return current
+
+def get_max_node(root):
+    current = root
+    while current is not None and current["right"] is not None:
+        current = current["right"]
+    return current
+
+def get_min(my_rbt):
+    min_node = get_min_node(my_rbt["root"])
+    return min_node["key"] if min_node is not None else None
+
+def get_max(my_rbt):
+    max_node = get_max_node(my_rbt["root"])
+    return max_node["key"] if max_node is not None else None
+
+def key_set_tree(root, key_list):
+    
+    if root is None:
+        return
+    key_set_tree(root["left"], key_list)
+    key_list.append(root["key"])
+    key_set_tree(root["right"], key_list)
+
+
+def key_set(my_rbt):
+    
+    buffer = []
+    key_set_tree(my_rbt.get("root"), buffer)
+
+    salida = sll.new_list()
+    for k in buffer:
+        sll.add_last(salida, k)
+    return salida
+
+
+def value_set_tree(root, value_list):
+    
+    if root is None:
+        return
+    value_set_tree(root["left"], value_list)
+    value_list.append(root["value"])
+    value_set_tree(root["right"], value_list)
+
+
+def value_set(my_rbt):
+    
+    buffer = []
+    value_set_tree(my_rbt.get("root"), buffer)
+
+    lista = sll.new_list()
+    for v in buffer:
+        sll.add_last(lista, v)
+    return lista
+
+def height_tree(root):
+    if root is None:
+        return 0
+    left_height = height_tree(root["left"])
+    right_height = height_tree(root["right"])
+    return 1 + max(left_height, right_height)
+
+def height(my_rbt):
+    return height_tree(my_rbt["root"])
+
+
+
+
+
