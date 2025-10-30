@@ -247,6 +247,89 @@ def height(my_rbt):
     return height_tree(my_rbt["root"])
 
 
+def keys_range(root, key_initial, key_final, list_key):
+    if root is None:
+        return
+
+    if key_initial is not None:
+        cmp_initial = default_compare(key_initial, root)
+        if cmp_initial < 0:
+            keys_range(root["left"], key_initial, key_final, list_key)
+    else:
+        keys_range(root["left"], key_initial, key_final, list_key)
+
+    in_range = True
+    if key_initial is not None:
+        cmp_initial = default_compare(key_initial, root)
+        if cmp_initial > 0:
+            in_range = False
+    
+    if key_final is not None and in_range:
+        cmp_final = default_compare(root["key"], {"key": key_final})
+        if cmp_final > 0:
+            in_range = False
+
+    if in_range:
+        sll.add_last(list_key, root["key"])
+
+    if key_final is not None:
+        cmp_final = default_compare(root["key"], {"key": key_final})
+        if cmp_final < 0:
+            keys_range(root["right"], key_initial, key_final, list_key)
+    else:
+        keys_range(root["right"], key_initial, key_final, list_key)
 
 
+def keys(my_rbt, key_initial, key_final):
+    if key_initial is not None and key_final is not None:
+        cmp = default_compare(key_initial, {"key": key_final})
+        if cmp > 0:
+            return sll.new_list()
 
+    result = sll.new_list()
+    keys_range(my_rbt.get("root"), key_initial, key_final, result)
+    return result
+
+
+def values_range(root, key_initial, key_final, value_list):
+    if root is None:
+        return
+
+    if key_initial is not None:
+        cmp_initial = default_compare(key_initial, root)
+        if cmp_initial < 0:
+            values_range(root["left"], key_initial, key_final, value_list)
+    else:
+        values_range(root["left"], key_initial, key_final, value_list)
+
+    in_range = True
+    if key_initial is not None:
+        cmp_initial = default_compare(key_initial, root)
+        if cmp_initial > 0:
+            in_range = False
+    
+    if key_final is not None and in_range:
+        cmp_final = default_compare(root["key"], {"key": key_final})
+        if cmp_final > 0:
+            in_range = False
+
+    if in_range:
+        sll.add_last(value_list, root["value"])
+
+    if key_final is not None:
+        cmp_final = default_compare(root["key"], {"key": key_final})
+        if cmp_final < 0:
+            values_range(root["right"], key_initial, key_final, value_list)
+    else:
+        values_range(root["right"], key_initial, key_final, value_list)
+
+
+def values(my_rbt, key_initial, key_final):
+    if key_initial is not None and key_final is not None:
+        cmp = default_compare(key_initial, {"key": key_final})
+        if cmp > 0:
+            return sll.new_list()
+
+    result = sll.new_list()
+    values_range(my_rbt.get("root"), key_initial, key_final, result)
+    return result
